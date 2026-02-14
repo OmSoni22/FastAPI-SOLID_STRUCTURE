@@ -31,8 +31,8 @@ app/
 │   ├── exceptions/    # Custom exceptions & handlers
 │   └── logging/       # Logging system
 ├── modules/           # Business modules
-│   └── entity/       # Example entity module
-│       ├── services/ # Business logic
+│   └── user/          # Example user module
+│       ├── services/  # Business logic
 │       ├── *_model.py   # SQLAlchemy models
 │       ├── *_schema.py  # Pydantic schemas
 │       ├── *_repository.py # Data access
@@ -106,8 +106,8 @@ Once running, visit:
 | `/api/health` | GET | Health check with version info |
 | `/api/health/liveness` | GET | K8s liveness probe |
 | `/api/health/readiness` | GET | K8s readiness probe (checks DB/Redis) |
-| `/api/v1/entities` | GET | List all entities |
-| `/api/v1/entities` | POST | Create new entity |
+| `/api/v1/users` | GET | List all users |
+| `/api/v1/users` | POST | Create new user |
 | `/api/v1/logs` | GET | Query logs with filters |
 | `/api/v1/logs/stats` | GET | Log file statistics |
 
@@ -125,7 +125,7 @@ pytest -m unit          # Unit tests only
 pytest -m integration   # Integration tests only
 
 # Run specific file
-pytest tests/test_entity_service.py
+pytest tests/test_user_service.py
 ```
 
 ## 📋 Database Migrations (Alembic)
@@ -192,6 +192,10 @@ All errors return consistent JSON:
   "path": "/api/v1/endpoint"
 }
 ```
+
+## 🤖 Created With AI
+
+This project was created with the assistance of various AI tools and large language models (LLMs).
 
 ## 📝 License
 

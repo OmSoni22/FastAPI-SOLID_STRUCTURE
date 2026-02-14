@@ -82,9 +82,8 @@ def client(test_db: AsyncSession) -> TestClient:
 
 
 @pytest.fixture
-def sample_entity_data() -> dict:
-    """Sample entity data for testing."""
+def sample_user_data() -> dict:
+    """Sample user data for testing."""
     return {
-        "name": "Test Entity",
-        "description": "A test entity for unit testing"
-    }
+        "name": "Test User",
+        "description": "A test user for unit testing"

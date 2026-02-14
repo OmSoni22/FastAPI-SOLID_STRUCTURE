@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Dict, Any, Type, TypeVar
 
 from app.modules.notification.services.notification_service import NotificationService
-from app.modules.entity.services.entity_service import EntityService
+from app.modules.user.services.user_service import UserService
 
 class ServiceFactory:
     """
@@ -22,12 +22,12 @@ class ServiceFactory:
         return self._services["notification"]
 
     @property
-    def entity(self) -> EntityService:
-        """Get or create EntityService with dependencies."""
-        if "entity" not in self._services:
-            # Auto-wire dependencies: EntityService needs Session + NotificationService
-            self._services["entity"] = EntityService(
+    def user(self) -> UserService:
+        """Get or create UserService with dependencies."""
+        if "user" not in self._services:
+            # Auto-wire dependencies: UserService needs Session + NotificationService
+            self._services["user"] = UserService(
                 session=self.session, 
                 notification_service=self.notification
             )
-        return self._services["entity"]
+        return self._services["user"]

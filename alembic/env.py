@@ -17,7 +17,7 @@ from app.core.config.settings import settings
 # Import Base and models
 from app.core.db.base import Base
 # Import all models here so they are registered in metadata
-from app.modules.entity.entity_model import Entity  # noqa
+from app.modules.user.user_model import User  # noqa
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

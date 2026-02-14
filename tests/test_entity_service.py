@@ -1,5 +1,5 @@
 """
-Unit tests for Entity service.
+Unit tests for User service.
 
 These tests verify the business logic in isolation.
 """
@@ -7,66 +7,72 @@ These tests verify the business logic in isolation.
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.modules.entity.entity_model import Entity
-from app.modules.entity.entity_schema import EntityCreate
-from app.modules.entity.services.entity_service import EntityService
+from app.modules.user.user_model import User
+from app.modules.user.user_schema import UserCreate
+from app.modules.user.services.user_service import UserService
+
+
+class DummyNotificationService:
+    async def send_email(self, recipient: str, subject: str, body: str):
+        # No-op for tests
+        return None
 
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_create_entity(test_db: AsyncSession, sample_entity_data: dict):
-    """Test creating an entity."""
+async def test_create_user(test_db: AsyncSession, sample_user_data: dict):
+    """Test creating a user."""
     # Arrange
-    service = EntityService(test_db)
-    payload = EntityCreate(**sample_entity_data)
+    service = UserService(test_db, DummyNotificationService())
+    payload = UserCreate(**sample_user_data)
     
     # Act
-    result = await service.create_entity(payload)
+    result = await service.create_user(payload)
     await test_db.commit()
     
     # Assert
     assert result is not None
-    assert isinstance(result, Entity)
-    assert result.name == sample_entity_data["name"]
-    assert result.description == sample_entity_data["description"]
+    assert isinstance(result, User)
+    assert result.name == sample_user_data["name"]
+    assert result.description == sample_user_data["description"]
     assert result.id is not None
 
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_get_entities(test_db: AsyncSession, sample_entity_data: dict):
-    """Test retrieving all entities."""
+async def test_get_users(test_db: AsyncSession, sample_user_data: dict):
+    """Test retrieving all users."""
     # Arrange
-    service = EntityService(test_db)
+    service = UserService(test_db, DummyNotificationService())
     
-    # Create test entities
-    entity1 = EntityCreate(**sample_entity_data)
-    entity2 = EntityCreate(name="Another Entity", description="Another test entity")
+    # Create test users
+    user1 = UserCreate(**sample_user_data)
+    user2 = UserCreate(name="Another User", description="Another test user")
     
-    await service.create_entity(entity1)
-    await service.create_entity(entity2)
+await service.create_user(user1)
+    await service.create_user(user2)
     await test_db.commit()
     
     # Act
-    results = await service.get_entities()
+    results = await service.get_users()
     
     # Assert
     assert len(results) == 2
-    assert all(isinstance(e, Entity) for e in results)
+    assert all(isinstance(u, User) for u in results)
 
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_create_entity_minimal(test_db: AsyncSession):
-    """Test creating an entity with minimal data."""
+async def test_create_user_minimal(test_db: AsyncSession):
+    """Test creating a user with minimal data."""
     # Arrange
-    service = EntityService(test_db)
-    payload = EntityCreate(name="Minimal Entity")
+    service = UserService(test_db, DummyNotificationService())
+    payload = UserCreate(name="Minimal User")
     
     # Act
-    result = await service.create_entity(payload)
+    result = await service.create_user(payload)
     await test_db.commit()
     
     # Assert
-    assert result.name == "Minimal Entity"
+    assert result.name == "Minimal User"
     assert result.description is None

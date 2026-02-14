@@ -6,14 +6,14 @@ from fastapi import APIRouter, Depends, Query
 from datetime import datetime
 from typing import Optional
 
-from app.modules.entity.entity_routes import router as entity_router
+from app.modules.user.user_routes import router as user_router
 from app.core.logging import log_reader
 from app.core.logging.schemas import LogResponse
 
 api_router = APIRouter()
 
 # Include module routers
-api_router.include_router(entity_router, prefix="/entities", tags=["Entities"])
+api_router.include_router(user_router, prefix="/users", tags=["Users"])
 
 
 # System/Logging endpoints

@@ -1,5 +1,5 @@
 """
-Integration tests for Entity API endpoints.
+Integration tests for User API endpoints.
 
 These tests verify the full request/response cycle.
 """
@@ -9,28 +9,28 @@ from fastapi.testclient import TestClient
 
 
 @pytest.mark.integration
-def test_create_entity_endpoint(client: TestClient, sample_entity_data: dict):
-    """Test POST /api/v1/entities endpoint."""
+def test_create_user_endpoint(client: TestClient, sample_user_data: dict):
+    """Test POST /api/v1/users endpoint."""
     # Act
-    response = client.post("/api/v1/entities/", json=sample_entity_data)
+    response = client.post("/api/v1/users/", json=sample_user_data)
     
     # Assert
     assert response.status_code == 201
     data = response.json()
-    assert data["name"] == sample_entity_data["name"]
-    assert data["description"] == sample_entity_data["description"]
+    assert data["name"] == sample_user_data["name"]
+    assert data["description"] == sample_user_data["description"]
     assert "id" in data
 
 
 @pytest.mark.integration
-def test_list_entities_endpoint(client: TestClient, sample_entity_data: dict):
-    """Test GET /api/v1/entities endpoint."""
-    # Arrange - Create some entities first
-    client.post("/api/v1/entities/", json=sample_entity_data)
-    client.post("/api/v1/entities/", json={"name": "Another Entity"})
+def test_list_users_endpoint(client: TestClient, sample_user_data: dict):
+    """Test GET /api/v1/users endpoint."""
+    # Arrange - Create some users first
+    client.post("/api/v1/users/", json=sample_user_data)
+    client.post("/api/v1/users/", json={"name": "Another User"})
     
     # Act
-    response = client.get("/api/v1/entities/")
+    response = client.get("/api/v1/users/")
     
     # Assert
     assert response.status_code == 200
@@ -40,10 +40,10 @@ def test_list_entities_endpoint(client: TestClient, sample_entity_data: dict):
 
 
 @pytest.mark.integration
-def test_create_entity_validation_error(client: TestClient):
-    """Test validation error for invalid entity data."""
+def test_create_user_validation_error(client: TestClient):
+    """Test validation error for invalid user data."""
     # Act - Missing required 'name' field
-    response = client.post("/api/v1/entities/", json={"description": "No name"})
+    response = client.post("/api/v1/users/", json={"description": "No name"})
     
     # Assert
     assert response.status_code == 422
