@@ -25,3 +25,4 @@ class UserService:
         return created_user
 
     async def get_users(self):
+        return await self.repository.get_all()

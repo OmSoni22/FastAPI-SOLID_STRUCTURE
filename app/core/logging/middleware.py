@@ -50,7 +50,8 @@ async def logging_middleware(request: Request, call_next):
         path=str(request.url),
         method=request.method,
         client_host=request.client.host if request.client else "unknown",
-        payload=payload[:500] if payload else ""  # Limit payload size in logs
+        payload=payload[:500] if payload else "", # Limit payload size in logs
+        show_in_terminal=False
     )
     
     # Process request
@@ -68,7 +69,8 @@ async def logging_middleware(request: Request, call_next):
             path=str(request.url),
             method=request.method,
             status_code=response.status_code,
-            duration_ms=round(duration * 1000, 2)
+            duration_ms=round(duration * 1000, 2),
+            show_in_terminal=False
         )
         
         # Add request ID to response headers

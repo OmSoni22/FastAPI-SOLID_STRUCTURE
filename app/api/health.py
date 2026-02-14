@@ -5,8 +5,10 @@ Enhanced health check endpoints with connectivity checks and version info.
 from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 import asyncio
+import rich
+from sqlalchemy import text
 
 from app.core.db.session import AsyncSessionLocal
 from app.core.cache.redis import redis_client
@@ -34,9 +36,10 @@ async def check_database() -> bool:
     try:
         async with AsyncSessionLocal() as session:
             # Simple query to test connection
-            await session.execute("SELECT 1")
+            await session.execute(text("SELECT 1"))
             return True
-    except Exception:
+    except Exception as e:
+        rich.print("Database connection failed", e)
         return False
 
 
@@ -47,7 +50,8 @@ async def check_redis() -> bool:
             return True  # Not enabled, so "healthy"
         await redis_client.ping()
         return True
-    except Exception:
+    except Exception as e:
+        rich.print("Redis connection failed", e)
         return False
 
 
@@ -113,16 +117,3 @@ async def readiness_check():
         )
     
     return response
-
-
-# For backward compatibility
-@router.get("/health/live")
-async def live_check():
-    """Alias for liveness check."""
-    return await liveness_check()
-
-
-@router.get("/health/ready")
-async def ready_check():
-    """Alias for readiness check."""
-    return await readiness_check()

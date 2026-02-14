@@ -38,7 +38,7 @@ debug_logger = setup_logger("debug", logging.DEBUG, f"{settings.log_dir}/debug.l
 info_logger = setup_logger("info", logging.INFO, f"{settings.log_dir}/info.log")
 error_logger = setup_logger("error", logging.ERROR, f"{settings.log_dir}/error.log")
 
-def add_to_log(level: str, message: str, **extra):
+def add_to_log(level: str, message: str, show_in_terminal: bool = True, **extra):
     logger_map = {
         "debug": debug_logger,
         "info": info_logger,
@@ -46,4 +46,5 @@ def add_to_log(level: str, message: str, **extra):
     }
     logger = logger_map.get(level, info_logger)
     logger.log(getattr(logging, level.upper()), message, extra=extra)
-    print(message) # Also print to stdout for container logs usually
+    if show_in_terminal:
+        print(message)

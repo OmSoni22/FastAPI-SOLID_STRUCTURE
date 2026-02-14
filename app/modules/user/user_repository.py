@@ -14,3 +14,4 @@ class UserRepository:
 
     async def get_all(self):
         result = await self.session.execute(select(User))
+        return result.scalars().all()
