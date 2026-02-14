@@ -15,6 +15,9 @@ api_router = APIRouter()
 # Include module routers
 api_router.include_router(user_router, prefix="/users", tags=["Users"])
 
+from app.api.cache_routes import router as cache_router
+api_router.include_router(cache_router, prefix="/cache", tags=["Cache"])
+
 
 # System/Logging endpoints
 @api_router.get("/logs", response_model=LogResponse, tags=["System"])

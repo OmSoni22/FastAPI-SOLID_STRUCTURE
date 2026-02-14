@@ -22,12 +22,21 @@ class ServiceFactory:
         return self._services["notification"]
 
     @property
+    def cache(self) -> "CacheService":
+        """Get or create CacheService."""
+        if "cache" not in self._services:
+            from app.core.cache.cache_service import CacheService
+            self._services["cache"] = CacheService()
+        return self._services["cache"]
+
+    @property
     def user(self) -> UserService:
         """Get or create UserService with dependencies."""
         if "user" not in self._services:
-            # Auto-wire dependencies: UserService needs Session + NotificationService
+            # Auto-wire dependencies: UserService needs Session + NotificationService + CacheService
             self._services["user"] = UserService(
                 session=self.session, 
-                notification_service=self.notification
+                notification_service=self.notification,
+                cache_service=self.cache
             )
         return self._services["user"]
